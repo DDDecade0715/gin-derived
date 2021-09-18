@@ -6,6 +6,7 @@ import (
 	"gin-derived/api/routes"
 	"gin-derived/global"
 	"gin-derived/initialize"
+	ws "gin-derived/pkg/websocket"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -28,6 +29,10 @@ func Api() {
 	config := global.GCONFIG
 	//设置gin模式
 	gin.SetMode(config.App.Mode)
+
+	//开启websocket
+	go ws.ClientManager.Start()
+
 	//设置http服务
 	router := routes.InitRoute()
 	var server *http.Server

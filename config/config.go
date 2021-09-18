@@ -17,11 +17,15 @@ type Server struct {
 }
 
 type App struct {
-	Root         string        //项目绝对路径
-	Mode         string        `mapstructure:"mode" json:"mode" yaml:"mode"` //
-	Port         string        `mapstructure:"port" json:"port" yaml:"port"` // 服务器地址:端口
-	ReadTimeout  time.Duration `mapstructure:"readTimeOut" json:"readTimeOut" yaml:"readTimeOut"`
-	WriteTimeout time.Duration `mapstructure:"writeTimeout" json:"writeTimeout" yaml:"writeTimeout"`
+	Root                 string        //项目绝对路径
+	Mode                 string        `mapstructure:"mode" json:"mode" yaml:"mode"` //
+	Port                 string        `mapstructure:"port" json:"port" yaml:"port"` // 服务器地址:端口
+	ReadTimeout          time.Duration `mapstructure:"readTimeOut" json:"readTimeOut" yaml:"readTimeOut"`
+	WriteTimeout         time.Duration `mapstructure:"writeTimeout" json:"writeTimeout" yaml:"writeTimeout"`
+	UploadImageMaxSize   int           `yaml:"uploadImageMaxSize"`
+	UploadPath           string        `yaml:"uploadPath"`
+	UploadUrl            string        `yaml:"uploadUrl"`
+	UploadImageAllowExts []string      `yaml:"uploadImageAllowExts"`
 }
 
 type Amqp struct {
