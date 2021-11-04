@@ -318,6 +318,9 @@ func UploadChatImage(c *gin.Context) {
 	}
 	//判断上传地址是否存在
 	savePath := global.GCONFIG.App.UploadPath
+	realPath := "/" + time.Now().Format("20060102")
+	//按日期分组
+	savePath += realPath
 	_, osErr := os.Stat(savePath)
 	if os.IsNotExist(osErr) {
 		err = os.MkdirAll(savePath, os.ModePerm)
@@ -363,7 +366,7 @@ func UploadChatImage(c *gin.Context) {
 
 	value := &models.ChatImage{
 		MessageId: chatId,
-		Url:       global.GCONFIG.App.UploadUrl + "/" + fileName,
+		Url:       global.GCONFIG.App.UploadUrl + realPath + "/" + fileName,
 	}
 	err = models.CreateChatImage(value)
 	if err != nil {
