@@ -248,6 +248,17 @@ func (message *ClientMessage) ReadMessage(msg []byte) error {
 		imService.SaveMessage(Chat)
 		//用户聊天消息管道
 		ClientManager.CommonChan <- msg
+	case "file":
+		global.GLOG.Infof("读取到客户端的信息,用户文件消息,%v", string(msg))
+		Chat := &models.MessageChat{}
+		err := json.Unmarshal(msg, &Chat)
+		if err != nil {
+			global.GLOG.Errorf("读取到客户端的信息,用户文件消息为空,%v", err.Error())
+			return err
+		}
+		imService.SaveMessage(Chat)
+		//用户聊天消息管道
+		ClientManager.CommonChan <- msg
 	default:
 		global.GLOG.Infof("读取到客户端的信息,没有规定类型,%v", string(msg))
 	}

@@ -32,6 +32,7 @@ func InitRoute() *gin.Engine {
 		imGroup.POST("/add_group_members", controller.AddGroupMembers)
 		imGroup.POST("/get_group_members", controller.GetGroupMembers)
 		imGroup.POST("/upload_group", controller.UploadGroup)
+		imGroup.POST("/get_message_info", controller.GetMessageInfoById)
 	}
 
 	//普通接口

@@ -142,6 +142,8 @@ func GetMessages(c *gin.Context) {
 			//发送人组装
 			FromByte := []byte(v.FromUser)
 			var From *models.FromUser
+			var fileName string
+			var fileSize int64
 			json.Unmarshal(FromByte, &From)
 			//时间转换
 			timer, _ := time.ParseInLocation("2006-01-02 15:04:05", v.SendTime, time.Local)
@@ -153,6 +155,15 @@ func GetMessages(c *gin.Context) {
 				v.Content = chatImage.Url
 			}
 
+			if v.Type == "file" {
+				chatImage, _ := models.FindChatImage(&models.ChatImage{
+					MessageId: v.MessageId,
+				})
+				v.Content = chatImage.Url
+				fileName = chatImage.FileName
+				fileSize = chatImage.FileSize
+			}
+
 			MessagesChat := &models.MessageChat{
 				Id:          v.MessageId,
 				Content:     v.Content,
@@ -162,6 +173,8 @@ func GetMessages(c *gin.Context) {
 				ToContactId: v.ToContactId,
 				Type:        v.Type,
 				MessageId:   v.MessageId,
+				FileName:    fileName,
+				FileSize:    fileSize,
 			}
 			result = append(result, MessagesChat)
 		}
@@ -190,6 +203,8 @@ func GetMessages(c *gin.Context) {
 			//发送人组装
 			FromByte := []byte(v.FromUser)
 			var From *models.FromUser
+			var fileName string
+			var fileSize int64
 			json.Unmarshal(FromByte, &From)
 			//时间转换
 			timer, _ := time.ParseInLocation("2006-01-02 15:04:05", v.SendTime, time.Local)
@@ -201,6 +216,15 @@ func GetMessages(c *gin.Context) {
 				v.Content = chatImage.Url
 			}
 
+			if v.Type == "file" {
+				chatImage, _ := models.FindChatImage(&models.ChatImage{
+					MessageId: v.MessageId,
+				})
+				v.Content = chatImage.Url
+				fileName = chatImage.FileName
+				fileSize = chatImage.FileSize
+			}
+
 			MessagesChat := &models.MessageChat{
 				Id:          v.MessageId,
 				Content:     v.Content,
@@ -210,6 +234,8 @@ func GetMessages(c *gin.Context) {
 				ToContactId: v.ToContactId,
 				Type:        v.Type,
 				MessageId:   v.MessageId,
+				FileName:    fileName,
+				FileSize:    fileSize,
 			}
 			result = append(result, MessagesChat)
 		}
@@ -335,6 +361,7 @@ func UploadChatImage(c *gin.Context) {
 		return
 	}
 
+	var fileSize int64
 	fileName := fileHeader.Filename
 	dst := savePath + "/" + fileName
 	//保存文件
@@ -358,6 +385,11 @@ func UploadChatImage(c *gin.Context) {
 		return
 	}
 
+	fi, err := os.Stat(dst)
+	if err == nil {
+		fileSize = fi.Size()
+	}
+
 	chatId, ok := c.GetPostForm("chat_id")
 	if !ok {
 		response.FailWithMessage("fail", c)
@@ -367,6 +399,8 @@ func UploadChatImage(c *gin.Context) {
 	value := &models.ChatImage{
 		MessageId: chatId,
 		Url:       global.GCONFIG.App.UploadUrl + realPath + "/" + fileName,
+		FileSize:  fileSize,
+		FileName:  fileName,
 	}
 	err = models.CreateChatImage(value)
 	if err != nil {
@@ -374,4 +408,25 @@ func UploadChatImage(c *gin.Context) {
 		return
 	}
 	response.OkWithData("success", value, c)
+}
+
+type FormMessage struct {
+	MessageId string `json:"message_id" binding:"required"`
+}
+
+//GetMessageInfoById 通过聊天记录ID获取url
+func GetMessageInfoById(c *gin.Context) {
+	var form FormMessage
+	if err := c.Bind(&form); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	chatVideo, _ := models.FindChatImage(&models.ChatImage{
+		MessageId: form.MessageId,
+	})
+	result := &models.ChatImage{
+		MessageId: chatVideo.MessageId,
+		Url:       chatVideo.Url,
+	}
+	response.OkWithData("success", result, c)
 }

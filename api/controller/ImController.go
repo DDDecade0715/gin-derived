@@ -28,3 +28,7 @@ func UpdateUserinfo(c *gin.Context) {
 func UploadChatImage(c *gin.Context) {
 	imService.UploadChatImage(c)
 }
+
+func GetMessageInfoById(c *gin.Context) {
+	imService.GetMessageInfoById(c)
+}

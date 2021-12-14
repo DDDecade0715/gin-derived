@@ -9,6 +9,8 @@ type ChatImage struct {
 	ID        uint       `gorm:"primary_key" json:"id"`
 	MessageId string     `json:"message_id"`
 	Url       string     `json:"url"`
+	FileName  string     `json:"file_name"`
+	FileSize  int64      `json:"file_size"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `sql:"index" json:"deleted_at"`

@@ -36,6 +36,8 @@ type MessageChat struct {
 	ToContactId string    `json:"toContactId"`
 	Type        string    `json:"type"`
 	MessageId   string    `json:"messageId"`
+	FileName    string    `json:"fileName"`
+	FileSize    int64     `json:"fileSize"`
 }
 
 type FromUser struct {
