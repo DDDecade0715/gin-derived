@@ -6,7 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20210729094743-e8d7ea3ceeed
 	github.com/fsnotify/fsnotify v1.4.9
-	github.com/gin-contrib/sessions v0.0.3
+	github.com/gin-contrib/sessions v0.0.3 // indirect
 	github.com/gin-gonic/gin v1.7.2
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/jinzhu/gorm v1.9.16
@@ -17,5 +17,5 @@ require (
 	github.com/spf13/viper v1.8.1
 	github.com/streadway/amqp v1.0.0
 	go.uber.org/zap v1.18.1
-	gorm.io/gorm v1.21.12
+	gorm.io/gorm v1.21.12 // indirect
 )
