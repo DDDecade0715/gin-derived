@@ -5,10 +5,20 @@ import (
 	"gin-derived/api/middleware"
 	ws "gin-derived/pkg/websocket"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 )
 
 func InitRoute() *gin.Engine {
 	router := gin.New()
+	//前端路由
+	router.GET("/", func(c *gin.Context) {
+		c.Writer.WriteHeader(200)
+		b, _ := ioutil.ReadFile("./templates/dist/index.html")
+		_, _ = c.Writer.Write(b)
+		c.Writer.Header().Add("Accept", "text/html")
+		c.Writer.Flush()
+	})
+	router.Static("/static", "./templates/dist/static")
 
 	//ws地址
 	router.GET("/ws", ws.WsHandler)
