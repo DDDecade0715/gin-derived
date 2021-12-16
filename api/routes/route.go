@@ -13,12 +13,12 @@ func InitRoute() *gin.Engine {
 	//前端路由
 	router.GET("/", func(c *gin.Context) {
 		c.Writer.WriteHeader(200)
-		b, _ := ioutil.ReadFile("./templates/dist/index.html")
+		b, _ := ioutil.ReadFile("./view/dist/index.html")
 		_, _ = c.Writer.Write(b)
 		c.Writer.Header().Add("Accept", "text/html")
 		c.Writer.Flush()
 	})
-	router.Static("/static", "./templates/dist/static")
+	router.Static("/static", "./view/dist/static")
 
 	//ws地址
 	router.GET("/ws", ws.WsHandler)
